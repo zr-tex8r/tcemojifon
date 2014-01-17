@@ -1,0 +1,66 @@
+% tcemojifon.sty
+
+%% package declaration
+\NeedsTeXFormat{pLaTeX2e}
+\ProvidesPackage{tcemojifon}[2014/01/17 v0.2]
+
+%% preparation
+\def\tcef@pkgname{tcemojifon}
+\def\tcef@error{\PackageError\tcef@pkgname}
+
+%% environment check
+\expandafter\ifx\csname T@JY2\endcsname\relax
+  \tcef@error{This package requires upTeX}
+   {Package loading will be aborted.}
+\expandafter\endinput\fi\relax
+
+%--------------------------------------- font declaration
+
+%% \tcef@fam
+\def\tcef@fam{tcemoj}
+
+\begingroup
+\def\S{0.924715}
+\let\FAM\tcef@fam
+
+%% family 'tcemoj'
+\DeclareKanjiFamily{JY2}{\FAM}{}
+\DeclareKanjiFamily{JT2}{\FAM}{}
+\begingroup
+\catcode13=9 \catcode32=9 \relax
+\def\do#1{\def\ENC{#1}\lowercase{\def\enc{#1}}
+  \DeclareFontShape{\ENC}{\FAM}{m}{n}{
+     <2.5-6>      s*[\S] \FAM-r-\enc-5
+     <6-7>        s*[\S] \FAM-r-\enc-6
+     <7-8>        s*[\S] \FAM-r-\enc-7
+     <8-9>        s*[\S] \FAM-r-\enc-8
+     <9-10>       s*[\S] \FAM-r-\enc-9
+    <10-10.95>    s*[\S] \FAM-r-\enc-10
+    <10.95-12>    s*[\S] \FAM-r-\enc-11
+    <12-14.4>     s*[\S] \FAM-r-\enc-12
+    <14.4-17.28>  s*[\S] \FAM-r-\enc-14
+    <17.28-20.74> s*[\S] \FAM-r-\enc-17
+    <20.74-24.88> s*[\S] \FAM-r-\enc-20
+    <24.88->      s*[\S] \FAM-r-\enc-25
+  }{}}
+  \do{JY2}\do{JT2}
+\endgroup
+\endgroup
+
+%--------------------------------------- user interface
+
+%%<*> \tcemoji
+\DeclareRobustCommand*\tcemoji{%
+  \kanjifamily{\tcef@fam}\kanjiseries{m}\kanjishape{n}%
+  \selectfont
+}
+
+%%<*> \texttcemoji{<text>}
+\DeclareRobustCommand\texttcemoji[1]{%
+  \relax \ifmmode \expandafter\nfss@text \fi
+  {\tcemoji{#1}}%
+}
+
+%--------------------------------------- done
+\endinput
+%% EOF
